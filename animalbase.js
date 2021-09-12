@@ -21,6 +21,7 @@ function start() {
   HTML.allBtn = document.querySelector('button[data-filter="*"]');
   // TODO: Add event-listeners to filter and sort buttons
 
+  HTML.allBtn.addEventListener("click", loadJSON);
   loadJSON();
 }
 
@@ -34,14 +35,34 @@ async function loadJSON() {
 
 function prepareObjects(jsonData) {
   allAnimals = jsonData.map(prepareObject);
-  console.log(allAnimals);
+  // console.log(allAnimals);
+  // const cats = allAnimals.filter(isCat);
+  // console.log(cats);
 
+  // HTML.onlyDogsBtn.addEventListener("click", filterDogs);
   // TODO: This might not be the function we want to call first
-  //   displayList(allAnimals);
+  displayList(allAnimals);
 }
 
-//decide what to filter
-function decideFilter() {}
+function filterList(animalType) {
+  let filteredList = allAnimals;
+  if (animalType === "cat") {
+    filteredList = allAnimals.filter(isCat);
+  } else if (animalType === "dog") {
+    filteredList = allAnimals.filter(isDog);
+  }
+
+  console.log(filteredList);
+  displayList(filteredList);
+}
+
+function isCat(animal) {
+  return animal.type === "cat";
+}
+
+function isDog(animal) {
+  return animal.type === "dog";
+}
 
 function prepareObject(jsonObject) {
   const animal = Object.create(Animal);
