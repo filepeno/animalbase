@@ -16,13 +16,23 @@ const Animal = {
 function start() {
   console.log("ready");
   //variables for filter buttons
-  HTML.onlyCatsBtn = document.querySelector('button[data-filter="cat"]');
-  HTML.onlyDogsBtn = document.querySelector('button[data-filter="dog"]');
-  HTML.allBtn = document.querySelector('button[data-filter="*"]');
+  // HTML.onlyCatsBtn = document.querySelector('button[data-filter="cat"]');
+  // HTML.onlyDogsBtn = document.querySelector('button[data-filter="dog"]');
+  // HTML.allBtn = document.querySelector('button[data-filter="*"]');
   // TODO: Add event-listeners to filter and sort buttons
-
-  HTML.allBtn.addEventListener("click", loadJSON);
+  detectButtonClick();
   loadJSON();
+}
+
+function detectButtonClick() {
+  document.querySelectorAll('button[data-action="filter"]').forEach((button) => button.addEventListener("click", getAnimalType));
+}
+
+function getAnimalType(event) {
+  console.log(event);
+  //gets the dataset value of filter of the clicked button
+  const filterType = event.target.dataset.filter;
+  filterList(filterType);
 }
 
 async function loadJSON() {
@@ -50,6 +60,8 @@ function filterList(animalType) {
     filteredList = allAnimals.filter(isCat);
   } else if (animalType === "dog") {
     filteredList = allAnimals.filter(isDog);
+  } else if (animalType === "*") {
+    filteredList = allAnimals.filter(all);
   }
 
   console.log(filteredList);
@@ -62,6 +74,10 @@ function isCat(animal) {
 
 function isDog(animal) {
   return animal.type === "dog";
+}
+
+function all(animal) {
+  return true;
 }
 
 function prepareObject(jsonObject) {
