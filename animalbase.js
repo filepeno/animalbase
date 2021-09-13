@@ -20,19 +20,27 @@ function start() {
   // HTML.onlyDogsBtn = document.querySelector('button[data-filter="dog"]');
   // HTML.allBtn = document.querySelector('button[data-filter="*"]');
   // TODO: Add event-listeners to filter and sort buttons
-  detectButtonClick();
+
   loadJSON();
+  detectButtonClick();
 }
 
 function detectButtonClick() {
   document.querySelectorAll('button[data-action="filter"]').forEach((button) => button.addEventListener("click", getAnimalType));
+  document.querySelectorAll('th[data-action="sort"]').forEach((th) => th.addEventListener("click", getSortingParams));
 }
 
 function getAnimalType(event) {
-  console.log(event);
   //gets the dataset value of filter of the clicked button
   const filterType = event.target.dataset.filter;
+  console.log(filterType);
   filterList(filterType);
+}
+
+function getSortingParams(event) {
+  const filterType = event.target.dataset.sort;
+  console.log(filterType);
+  // const sortingParam
 }
 
 async function loadJSON() {
@@ -46,39 +54,45 @@ async function loadJSON() {
 function prepareObjects(jsonData) {
   allAnimals = jsonData.map(prepareObject);
   // console.log(allAnimals);
-  // const cats = allAnimals.filter(isCat);
-  // console.log(cats);
-
-  // HTML.onlyDogsBtn.addEventListener("click", filterDogs);
   // TODO: This might not be the function we want to call first
   displayList(allAnimals);
 }
 
 function filterList(animalType) {
-  let filteredList = allAnimals;
-  if (animalType === "cat") {
-    filteredList = allAnimals.filter(isCat);
-  } else if (animalType === "dog") {
-    filteredList = allAnimals.filter(isDog);
-  } else if (animalType === "*") {
-    filteredList = allAnimals.filter(all);
+  if (animalType === "*") {
+    displayList(allAnimals);
+  } else {
+    const filteredList = allAnimals.filter(isAnimalType);
+    function isAnimalType(animal) {
+      if (animal.type === animalType) {
+        return true;
+      }
+    }
+
+    // if (animalType === "cat") {
+    //   filteredList = allAnimals.filter(isCat);
+    // } else if (animalType === "dog") {
+    //   filteredList = allAnimals.filter(isDog);
+    // } else if (animalType === "*") {
+    //   filteredList = allAnimals.filter(all);
+    // }
+
+    console.log(filteredList);
+    displayList(filteredList);
   }
-
-  console.log(filteredList);
-  displayList(filteredList);
 }
 
-function isCat(animal) {
-  return animal.type === "cat";
-}
+// function isCat(animal) {
+//   return animal.type === "cat";
+// }
 
-function isDog(animal) {
-  return animal.type === "dog";
-}
+// function isDog(animal) {
+//   return animal.type === "dog";
+// }
 
-function all(animal) {
-  return true;
-}
+// function all(animal) {
+//   return true;
+// }
 
 function prepareObject(jsonObject) {
   const animal = Object.create(Animal);
