@@ -38,9 +38,10 @@ function getAnimalType(event) {
 }
 
 function getSortingParams(event) {
-  const filterType = event.target.dataset.sort;
-  console.log(filterType);
-  // const sortingParam
+  console.log(event);
+  const sortingParam = event.target.dataset.sort;
+
+  sortList(sortingParam);
 }
 
 async function loadJSON() {
@@ -93,6 +94,50 @@ function filterList(animalType) {
 // function all(animal) {
 //   return true;
 // }
+
+function sortList(sortingParam) {
+  console.log(sortingParam);
+
+  if (sortingParam === "name") {
+    allAnimals.sort(compareByName);
+  } else if (sortingParam === "type") {
+    allAnimals.sort(compareByType);
+  } else if (sortingParam === "desc") {
+    allAnimals.sort(compareByDesc);
+  } else if (sortingParam === "age") {
+    allAnimals.sort(compareByAge);
+  }
+  // console.log(allAnimals);
+  displayList(allAnimals);
+}
+
+function compareByName(a, b) {
+  if (a.name < b.name) {
+    return -1;
+  }
+  return 1;
+}
+
+function compareByType(a, b) {
+  if (a.type < b.type) {
+    return -1;
+  }
+  return 1;
+}
+
+function compareByDesc(a, b) {
+  if (a.desc < b.desc) {
+    return -1;
+  }
+  return 1;
+}
+
+function compareByAge(a, b) {
+  if (a.age < b.age) {
+    return -1;
+  }
+  return 1;
+}
 
 function prepareObject(jsonObject) {
   const animal = Object.create(Animal);
