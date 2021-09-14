@@ -22,15 +22,14 @@ function start() {
   // TODO: Add event-listeners to filter and sort buttons
 
   loadJSON();
-  detectButtonClick();
 }
 
 function detectButtonClick() {
-  document.querySelectorAll('button[data-action="filter"]').forEach((button) => button.addEventListener("click", getAnimalType));
+  document.querySelectorAll('button[data-action="filter"]').forEach((button) => button.addEventListener("click", getFilterType));
   document.querySelectorAll('th[data-action="sort"]').forEach((th) => th.addEventListener("click", getSortingParams));
 }
 
-function getAnimalType(event) {
+function getFilterType(event) {
   //gets the dataset value of filter of the clicked button
   const filterType = event.target.dataset.filter;
   console.log(filterType);
@@ -54,6 +53,7 @@ async function loadJSON() {
 
 function prepareObjects(jsonData) {
   allAnimals = jsonData.map(prepareObject);
+  detectButtonClick();
   // console.log(allAnimals);
   // TODO: This might not be the function we want to call first
   displayList(allAnimals);
@@ -70,73 +70,24 @@ function filterList(animalType) {
       }
     }
 
-    // if (animalType === "cat") {
-    //   filteredList = allAnimals.filter(isCat);
-    // } else if (animalType === "dog") {
-    //   filteredList = allAnimals.filter(isDog);
-    // } else if (animalType === "*") {
-    //   filteredList = allAnimals.filter(all);
-    // }
-
     console.log(filteredList);
     displayList(filteredList);
   }
 }
 
-// function isCat(animal) {
-//   return animal.type === "cat";
-// }
-
-// function isDog(animal) {
-//   return animal.type === "dog";
-// }
-
-// function all(animal) {
-//   return true;
-// }
-
 function sortList(sortingParam) {
   console.log(sortingParam);
+  let sortedAnimals = allAnimals.sort(compareByParam);
 
-  if (sortingParam === "name") {
-    allAnimals.sort(compareByName);
-  } else if (sortingParam === "type") {
-    allAnimals.sort(compareByType);
-  } else if (sortingParam === "desc") {
-    allAnimals.sort(compareByDesc);
-  } else if (sortingParam === "age") {
-    allAnimals.sort(compareByAge);
+  function compareByParam(a, b) {
+    console.log("User selected " + sortingParam);
+    if (a[sortingParam] < b[sortingParam]) {
+      return -1;
+    }
+    return 1;
   }
   // console.log(allAnimals);
   displayList(allAnimals);
-}
-
-function compareByName(a, b) {
-  if (a.name < b.name) {
-    return -1;
-  }
-  return 1;
-}
-
-function compareByType(a, b) {
-  if (a.type < b.type) {
-    return -1;
-  }
-  return 1;
-}
-
-function compareByDesc(a, b) {
-  if (a.desc < b.desc) {
-    return -1;
-  }
-  return 1;
-}
-
-function compareByAge(a, b) {
-  if (a.age < b.age) {
-    return -1;
-  }
-  return 1;
 }
 
 function prepareObject(jsonObject) {
