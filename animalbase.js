@@ -39,8 +39,16 @@ function getFilterType(event) {
 function getSortingParams(event) {
   console.log(event);
   const sortingParam = event.target.dataset.sort;
+  const sortDir = event.target.dataset.sortDirection;
+  console.log(`User selected ${sortingParam} and ${sortDir}`);
+  //toggle direction in HTML
+  if (sortDir === "asc") {
+    event.target.dataset.sortDirection = "desc";
+  } else {
+    event.target.dataset.sortDirection = "asc";
+  }
 
-  sortList(sortingParam);
+  sortList(sortingParam, sortDir);
 }
 
 async function loadJSON() {
@@ -75,16 +83,19 @@ function filterList(animalType) {
   }
 }
 
-function sortList(sortingParam) {
-  console.log(sortingParam);
+function sortList(sortingParam, sortDir) {
+  console.log(`sortList received ${sortingParam} and ${sortDir}`);
+  let direction = 1;
+  if (sortDir === "desc") {
+    direction = -1;
+  }
   let sortedAnimals = allAnimals.sort(compareByParam);
 
   function compareByParam(a, b) {
-    console.log("User selected " + sortingParam);
     if (a[sortingParam] < b[sortingParam]) {
-      return -1;
+      return -1 * direction;
     }
-    return 1;
+    return 1 * direction;
   }
   // console.log(allAnimals);
   displayList(allAnimals);
